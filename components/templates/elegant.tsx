@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { CalendarDays, MapPin, Ticket, Clock, Car } from "lucide-react";
+import { CalendarDays, MapPin, Ticket, Clock } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TemplateProps } from "./types";
@@ -22,45 +22,48 @@ export function ElegantTemplate({
   camping,
 }: TemplateProps) {
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card/80 p-6 backdrop-blur">
-        <div className="mx-auto max-w-4xl text-center">
-          <h1 className="font-serif text-3xl italic tracking-tight text-foreground md:text-5xl">
+    <div className="min-h-screen bg-[#f8f5f0]">
+      <div className="mx-auto max-w-3xl px-4 py-12">
+        {/* Header */}
+        <header className="mb-12 text-center">
+          <h1 className="font-serif text-3xl italic tracking-tight text-[#2c1810] md:text-5xl">
             {title}
           </h1>
-        </div>
-      </header>
+        </header>
 
-      {/* Cover Image */}
-      {coverImageUrl && (
-        <div className="mx-auto max-w-5xl px-6 pt-8">
-          <div className="aspect-[21/9] w-full overflow-hidden rounded-lg">
-            <img
-              src={coverImageUrl}
-              alt={title}
-              className="h-full w-full object-cover"
-            />
+        {/* Cover Image */}
+        {coverImageUrl && (
+          <div className="mb-12">
+            <div className="aspect-[16/9] w-full overflow-hidden rounded-lg">
+              <img
+                src={coverImageUrl}
+                alt={title}
+                className="h-full w-full object-cover"
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <div className="mx-auto max-w-3xl space-y-12 p-8">
         {/* Event Details */}
-        <div className="flex flex-col items-center gap-6 border-y border-border py-8 text-center">
-          <div className="flex items-center gap-2 text-lg font-light tracking-wide text-foreground">
-            <CalendarDays className="h-5 w-5 text-muted-foreground" />
+        <div className="mb-12 flex flex-col items-center gap-6 border-y border-[#e6e0d6] py-8 text-center">
+          <div className="flex items-center gap-2 text-lg font-light tracking-wide text-[#2c1810]">
+            <CalendarDays className="h-5 w-5 text-[#8b7355]" />
             {fromDate && format(new Date(fromDate), "MMMM d, yyyy")}
             {hasTimeSlot && (
               <>
-                {timeSlotStart && ` ${timeSlotStart}`}
-                {timeSlotEnd && ` - ${timeSlotEnd}`}
+                {timeSlotStart && (
+                  <span className="ml-2 flex items-center gap-2">
+                    <Clock className="h-5 w-5 text-[#8b7355]" />
+                    {timeSlotStart}
+                    {timeSlotEnd && ` - ${timeSlotEnd}`}
+                  </span>
+                )}
               </>
             )}
           </div>
           {location && (
-            <div className="flex items-center gap-2 text-lg font-light tracking-wide text-foreground">
-              <MapPin className="h-5 w-5 text-muted-foreground" />
+            <div className="flex items-center gap-2 text-lg font-light tracking-wide text-[#2c1810]">
+              <MapPin className="h-5 w-5 text-[#8b7355]" />
               {location}
             </div>
           )}
@@ -68,41 +71,47 @@ export function ElegantTemplate({
 
         {/* Description */}
         {(ingress || body) && (
-          <div className="prose prose-lg dark:prose-invert mx-auto max-w-2xl text-center">
+          <div className="mb-12 text-center">
             {ingress && (
-              <p className="font-light leading-relaxed tracking-wide">{ingress}</p>
+              <p className="font-light italic leading-relaxed tracking-wide text-[#2c1810]">
+                {ingress}
+              </p>
             )}
             {body && (
-              <p className="font-light leading-relaxed tracking-wide">{body}</p>
+              <div className="mt-6 font-light leading-relaxed tracking-wide text-[#2c1810]/80">
+                {body.split('\n').map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
+              </div>
             )}
           </div>
         )}
 
         {/* Ticket Types */}
         {ticketTypes && ticketTypes.length > 0 && (
-          <div className="space-y-6">
-            <h2 className="text-center text-2xl font-semibold text-foreground">
+          <div className="mb-12">
+            <h2 className="mb-8 text-center text-2xl font-serif italic text-[#2c1810]">
               Tickets
             </h2>
             <div className="grid gap-6 md:grid-cols-3">
               {ticketTypes.map((ticket, index) => (
-                <Card key={index} className="p-6 bg-card">
+                <Card key={index} className="border-[#e6e0d6] bg-white p-6">
                   <div className="space-y-4 text-center">
                     <div>
-                      <h3 className="font-serif text-xl text-foreground">
+                      <h3 className="font-serif text-xl text-[#2c1810]">
                         {ticket.name}
                       </h3>
-                      <div className="mt-2 text-2xl font-light">
-                        ${ticket.price}
+                      <div className="mt-2 text-2xl font-light text-[#2c1810]">
+                        ${ticket.price.toFixed(2)}
                       </div>
                     </div>
                     {ticket.description && (
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-[#8b7355]">
                         {ticket.description}
                       </p>
                     )}
                     {ticket.quantity && (
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-[#8b7355]">
                         {ticket.quantity} tickets available
                       </p>
                     )}
@@ -113,20 +122,20 @@ export function ElegantTemplate({
           </div>
         )}
 
-        {/* Venue Information */}
+        {/* Additional Information */}
         {(entrance?.length > 0 || parking?.length > 0 || camping?.length > 0) && (
-          <div className="space-y-6">
-            <h2 className="text-center text-2xl font-semibold text-foreground">
+          <div className="mb-12">
+            <h2 className="mb-8 text-center text-2xl font-serif italic text-[#2c1810]">
               Event Details
             </h2>
-            <Card className="p-6 bg-card">
+            <Card className="border-[#e6e0d6] bg-white p-6">
               <div className="grid gap-8 md:grid-cols-2">
                 {entrance?.length > 0 && (
                   <div className="text-center">
-                    <h3 className="font-serif text-xl text-foreground">
+                    <h3 className="font-serif text-xl text-[#2c1810]">
                       Check-in Information
                     </h3>
-                    <div className="mt-4 space-y-3 text-sm text-muted-foreground">
+                    <div className="mt-4 space-y-3 text-sm text-[#8b7355]">
                       {hasTimeSlot && timeSlotStart && (
                         <div className="flex items-center justify-center gap-2">
                           <Clock className="h-4 w-4" />
@@ -147,31 +156,25 @@ export function ElegantTemplate({
 
                 {parking?.length > 0 && (
                   <div className="text-center">
-                    <h3 className="font-serif text-xl text-foreground">
-                      Parking
+                    <h3 className="font-serif text-xl text-[#2c1810]">
+                      Parking Information
                     </h3>
-                    <div className="mt-4 space-y-2 text-sm text-muted-foreground">
+                    <div className="mt-4 space-y-2 text-sm text-[#8b7355]">
                       {parking.map((info, index) => (
-                        <div key={index} className="flex items-center justify-center gap-2">
-                          <Car className="h-4 w-4" />
-                          {info}
-                        </div>
+                        <div key={index}>{info}</div>
                       ))}
                     </div>
                   </div>
                 )}
 
                 {camping?.length > 0 && (
-                  <div className="text-center md:col-span-2">
-                    <h3 className="font-serif text-xl text-foreground">
-                      Camping
+                  <div className="text-center">
+                    <h3 className="font-serif text-xl text-[#2c1810]">
+                      Camping Information
                     </h3>
-                    <div className="mt-4 space-y-2 text-sm text-muted-foreground">
+                    <div className="mt-4 space-y-2 text-sm text-[#8b7355]">
                       {camping.map((info, index) => (
-                        <div key={index} className="flex items-center justify-center gap-2">
-                          <Ticket className="h-4 w-4" />
-                          {info}
-                        </div>
+                        <div key={index}>{info}</div>
                       ))}
                     </div>
                   </div>
@@ -181,18 +184,26 @@ export function ElegantTemplate({
           </div>
         )}
 
-        {/* Additional Images */}
+        {/* Image Gallery */}
         {images && images.length > 0 && (
-          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-            {images.map((image, index) => (
-              <div key={index} className="aspect-[4/3] overflow-hidden rounded-lg">
-                <img
-                  src={image}
-                  alt={`Event image ${index + 1}`}
-                  className="h-full w-full object-cover transition-transform hover:scale-105 duration-300"
-                />
-              </div>
-            ))}
+          <div>
+            <h2 className="mb-8 text-center text-2xl font-serif italic text-[#2c1810]">
+              Gallery
+            </h2>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+              {images.map((url, index) => (
+                <div
+                  key={index}
+                  className="aspect-square overflow-hidden rounded-lg border border-[#e6e0d6]"
+                >
+                  <img
+                    src={url}
+                    alt={`Event image ${index + 1}`}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
