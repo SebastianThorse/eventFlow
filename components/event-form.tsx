@@ -180,7 +180,7 @@ export function EventForm({ templateId, eventId }: EventFormProps) {
         ...values,
         from_date: values.from_date.toISOString(),
         to_date: values.to_date.toISOString(),
-        template_id: templateId,
+        template_id: formData.templateId,
         custom_styles: formData.customStyles,
       };
       
@@ -199,6 +199,8 @@ export function EventForm({ templateId, eventId }: EventFormProps) {
       
       toast.success(eventId ? "Event updated successfully" : "Event created successfully");
       
+      router.refresh(); 
+
       router.push(`/event/${data.slug}`);
     } catch (error: any) {
       console.error("Error saving event:", error);

@@ -22,19 +22,19 @@ export function BoldTemplate({
   camping,
 }: TemplateProps) {
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-white dark:bg-black">
       <div className="mx-auto max-w-3xl px-4 py-12">
         {/* Hero Section */}
-        <div className="mb-12 overflow-hidden rounded-lg bg-black">
+        <div className="mb-12 overflow-hidden rounded-lg bg-white dark:bg-black">
           <div className="relative aspect-[16/9]">
             {coverImageUrl && (
               <img
                 src={coverImageUrl}
                 alt={title}
-                className="absolute h-full w-full object-cover opacity-50"
+                className="absolute h-full w-full object-cover opacity-80 dark:opacity-50"
               />
             )}
-            <div className="absolute h-full w-full bg-gradient-to-br from-purple-600 to-pink-600 opacity-90 dark:opacity-70" />
+            <div className="absolute h-full w-full bg-gradient-to-br from-purple-600 to-pink-600 opacity-70" />
             <div className="absolute inset-0 flex items-center justify-center p-8">
               <div className="text-center">
                 <h1 className="mb-6 text-4xl font-black uppercase tracking-tight text-white md:text-5xl">
@@ -74,12 +74,12 @@ export function BoldTemplate({
         {(ingress || body) && (
           <div className="mb-12 text-center">
             {ingress && (
-              <p className="text-xl font-medium leading-relaxed text-white">
+              <p className="text-xl font-medium leading-relaxed text-gray-900 dark:text-white">
                 {ingress}
               </p>
             )}
             {body && (
-              <div className="mt-6 space-y-4 text-lg text-white/80">
+              <div className="mt-6 space-y-4 text-lg text-gray-700 dark:text-white/80">
                 {body.split('\n').map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>
                 ))}
@@ -91,29 +91,29 @@ export function BoldTemplate({
         {/* Ticket Types */}
         {ticketTypes && ticketTypes.length > 0 && (
           <div className="mb-12">
-            <h2 className="mb-8 text-center text-3xl font-black uppercase tracking-tight text-white">
+            <h2 className="mb-8 text-center text-3xl font-black uppercase tracking-tight text-gray-900 dark:text-white">
               Get Your Tickets
             </h2>
             <div className="grid gap-6 md:grid-cols-3">
               {ticketTypes.map((ticket, index) => (
                 <Card
                   key={index}
-                  className="overflow-hidden bg-white/10 backdrop-blur"
+                  className="overflow-hidden bg-gray-50/80 backdrop-blur dark:bg-white/10"
                 >
                   <div className="p-6 text-center">
-                    <h3 className="mb-2 text-xl font-bold uppercase text-white">
+                    <h3 className="mb-2 text-xl font-bold uppercase text-gray-900 dark:text-white">
                       {ticket.name}
                     </h3>
-                    <div className="mb-4 text-3xl font-black text-purple-400">
+                    <div className="mb-4 text-3xl font-black text-purple-600 dark:text-purple-400">
                       ${ticket.price.toFixed(2)}
                     </div>
                     {ticket.description && (
-                      <p className="mb-2 text-sm text-white/60">
+                      <p className="mb-2 text-sm text-gray-600 dark:text-white/60">
                         {ticket.description}
                       </p>
                     )}
                     {ticket.quantity && (
-                      <p className="text-sm text-white/60">
+                      <p className="text-sm text-gray-600 dark:text-white/60">
                         {ticket.quantity} tickets available
                       </p>
                     )}
@@ -127,14 +127,14 @@ export function BoldTemplate({
         {/* Additional Information */}
         {(entrance?.length > 0 || parking?.length > 0 || camping?.length > 0) && (
           <div className="mb-12">
-            <h2 className="mb-8 text-center text-3xl font-black uppercase tracking-tight text-white">
+            <h2 className="mb-8 text-center text-3xl font-black uppercase tracking-tight text-gray-900 dark:text-white">
               Event Information
             </h2>
             <div className="grid gap-8 md:grid-cols-3">
               {entrance?.length > 0 && (
-                <Card className="overflow-hidden bg-white/10 backdrop-blur">
+                <Card className="overflow-hidden bg-gray-50/80 backdrop-blur dark:bg-white/10">
                   <div className="p-6 text-center">
-                    <h3 className="mb-4 text-xl font-bold uppercase text-white">
+                    <h3 className="mb-4 text-xl font-bold uppercase text-gray-900 dark:text-white">
                       Entrance
                     </h3>
                     <div className="flex flex-wrap justify-center gap-2">
@@ -142,7 +142,7 @@ export function BoldTemplate({
                         <Badge
                           key={index}
                           variant="secondary"
-                          className="bg-purple-400/20 text-purple-200"
+                          className="bg-purple-100 text-purple-700 dark:bg-purple-400/20 dark:text-purple-200"
                         >
                           {info}
                         </Badge>
@@ -153,9 +153,9 @@ export function BoldTemplate({
               )}
 
               {parking?.length > 0 && (
-                <Card className="overflow-hidden bg-white/10 backdrop-blur">
+                <Card className="overflow-hidden bg-gray-50/80 backdrop-blur dark:bg-white/10">
                   <div className="p-6 text-center">
-                    <h3 className="mb-4 text-xl font-bold uppercase text-white">
+                    <h3 className="mb-4 text-xl font-bold uppercase text-gray-900 dark:text-white">
                       Parking
                     </h3>
                     <div className="flex flex-wrap justify-center gap-2">
@@ -163,7 +163,7 @@ export function BoldTemplate({
                         <Badge
                           key={index}
                           variant="secondary"
-                          className="bg-purple-400/20 text-purple-200"
+                          className="bg-purple-100 text-purple-700 dark:bg-purple-400/20 dark:text-purple-200"
                         >
                           {info}
                         </Badge>
@@ -174,9 +174,9 @@ export function BoldTemplate({
               )}
 
               {camping?.length > 0 && (
-                <Card className="overflow-hidden bg-white/10 backdrop-blur">
+                <Card className="overflow-hidden bg-gray-50/80 backdrop-blur dark:bg-white/10">
                   <div className="p-6 text-center">
-                    <h3 className="mb-4 text-xl font-bold uppercase text-white">
+                    <h3 className="mb-4 text-xl font-bold uppercase text-gray-900 dark:text-white">
                       Camping
                     </h3>
                     <div className="flex flex-wrap justify-center gap-2">
@@ -184,7 +184,7 @@ export function BoldTemplate({
                         <Badge
                           key={index}
                           variant="secondary"
-                          className="bg-purple-400/20 text-purple-200"
+                          className="bg-purple-100 text-purple-700 dark:bg-purple-400/20 dark:text-purple-200"
                         >
                           {info}
                         </Badge>
@@ -200,7 +200,7 @@ export function BoldTemplate({
         {/* Image Gallery */}
         {images && images.length > 0 && (
           <div>
-            <h2 className="mb-8 text-center text-3xl font-black uppercase tracking-tight text-white">
+            <h2 className="mb-8 text-center text-3xl font-black uppercase tracking-tight text-gray-900 dark:text-white">
               Gallery
             </h2>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">

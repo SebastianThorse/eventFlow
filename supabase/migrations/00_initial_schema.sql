@@ -11,6 +11,20 @@ CREATE TABLE public.user_profiles (
     updated_at timestamp with time zone DEFAULT now() NOT NULL
 );
 
+-- Function to create a profile for a new user
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  INSERT INTO public.user_profiles (user_id, email)
+  VALUES (NEW.id, NEW.email);
+  RETURN NEW;
+END;
+$$;
+
 -- Create events table
 CREATE TABLE public.events (
     id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -79,6 +93,97 @@ BEGIN
     SET event_credits = event_credits + credit_change,
         updated_at = now()
     WHERE user_id = target_user_id;
+END;
+$$;
+
+-- Drop the existing update_event function if it exists
+DROP FUNCTION IF EXISTS public.update_event;
+
+-- Create a trigger function to handle updates
+CREATE OR REPLACE FUNCTION public.handle_event_update()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  -- Set updated_at timestamp
+  NEW.updated_at = now();
+  
+  -- Ensure arrays are not null
+  NEW.images = COALESCE(NEW.images, ARRAY[]::text[]);
+  NEW.ticket_types = COALESCE(NEW.ticket_types, ARRAY[]::jsonb[]);
+  NEW.entrance = COALESCE(NEW.entrance, ARRAY[]::text[]);
+  NEW.parking = COALESCE(NEW.parking, ARRAY[]::text[]);
+  NEW.camping = COALESCE(NEW.camping, ARRAY[]::text[]);
+  
+  RETURN NEW;
+END;
+$$;
+
+-- Create the trigger
+DROP TRIGGER IF EXISTS on_event_update ON public.events;
+CREATE TRIGGER on_event_update
+  BEFORE UPDATE ON public.events
+  FOR EACH ROW
+  EXECUTE FUNCTION public.handle_event_update();
+
+-- Create RPC function for updating events
+CREATE OR REPLACE FUNCTION public.update_event(
+  p_event_id uuid,
+  p_user_id text,
+  p_title text,
+  p_ingress text DEFAULT NULL,
+  p_body text DEFAULT NULL,
+  p_from_date timestamp with time zone DEFAULT NULL,
+  p_to_date timestamp with time zone DEFAULT NULL,
+  p_has_time_slot boolean DEFAULT false,
+  p_time_slot_start time DEFAULT NULL,
+  p_time_slot_end time DEFAULT NULL,
+  p_location text DEFAULT NULL,
+  p_cover_image_url text DEFAULT NULL,
+  p_images text[] DEFAULT ARRAY[]::text[],
+  p_ticket_types jsonb[] DEFAULT ARRAY[]::jsonb[],
+  p_entrance text[] DEFAULT ARRAY[]::text[],
+  p_parking text[] DEFAULT ARRAY[]::text[],
+  p_camping text[] DEFAULT ARRAY[]::text[],
+  p_template_id text DEFAULT NULL
+)
+RETURNS public.events
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_event public.events;
+BEGIN
+  -- Update the event
+  UPDATE public.events
+  SET
+    title = p_title,
+    ingress = p_ingress,
+    body = p_body,
+    from_date = p_from_date,
+    to_date = p_to_date,
+    has_time_slot = p_has_time_slot,
+    time_slot_start = p_time_slot_start,
+    time_slot_end = p_time_slot_end,
+    location = p_location,
+    cover_image_url = p_cover_image_url,
+    images = p_images,
+    ticket_types = p_ticket_types,
+    entrance = p_entrance,
+    parking = p_parking,
+    camping = p_camping,
+    template_id = COALESCE(p_template_id, template_id)
+  WHERE id = p_event_id AND user_id = p_user_id
+  RETURNING * INTO v_event;
+
+  IF v_event IS NULL THEN
+    RAISE EXCEPTION 'Event not found or not owned by user';
+  END IF;
+
+  RETURN v_event;
 END;
 $$;
 

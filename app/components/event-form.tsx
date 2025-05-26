@@ -152,6 +152,76 @@ export function EventForm({ templateId, eventId }: EventFormProps) {
     return () => subscription.unsubscribe();
   }, [form, setFormData, templateId]);
 
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!user) {
+      router.push("/sign-in");
+      return;
+    }
+    
+    setIsSubmitting(true);
+    console.log('Starting event update/creation with values:', values);
+    
+    try {
+      const apiEndpoint = eventId ? `/api/events/${eventId}` : "/api/events";
+      const method = eventId ? "PUT" : "POST";
+      
+      // Ensure dates are properly formatted for the API and remove undefined values
+      const formattedValues = {
+        title: values.title,
+        ingress: values.ingress || null,
+        body: values.body || null,
+        from_date: values.from_date.toISOString(),
+        to_date: values.to_date.toISOString(),
+        has_time_slot: values.has_time_slot,
+        time_slot_start: values.time_slot_start || null,
+        time_slot_end: values.time_slot_end || null,
+        location: values.location || null,
+        cover_image_url: values.cover_image_url || null,
+        images: values.images,
+        ticket_types: values.ticket_types,
+        entrance: values.entrance,
+        parking: values.parking,
+        camping: values.camping,
+        template_id: templateId,
+        custom_styles: formData.customStyles || null,
+      };
+      
+      console.log('Sending request to:', apiEndpoint);
+      console.log('Request payload:', formattedValues);
+      
+      const response = await fetch(apiEndpoint, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formattedValues),
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        console.error('Server response error:', error);
+        throw new Error(error.message || "Failed to save event");
+      }
+      
+      const data = await response.json();
+      console.log('Server response success:', data);
+      
+      toast({
+        title: "Success",
+        description: eventId ? "Event updated successfully" : "Event created successfully"
+      });
+      
+      router.push(`/event/${data.slug}`);
+    } catch (error: any) {
+      console.error("Error saving event:", error);
+      toast({
+        title: "Error",
+        description: error.message || "There was a problem saving your event",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   // ... rest of the code ...
 }
 

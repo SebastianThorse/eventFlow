@@ -103,7 +103,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold">Simple Pricing</h3>
               <p className="text-center text-muted-foreground">
-                Pay per event with no monthly fees or hidden costs.
+                Start free with 1 credit, then pay per event with no monthly fees.
               </p>
             </div>
             <div className="flex flex-col items-center justify-center space-y-2 rounded-lg border bg-card p-4 shadow-sm transition-all hover:shadow-md">

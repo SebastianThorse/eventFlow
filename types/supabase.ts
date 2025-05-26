@@ -154,6 +154,29 @@ export interface Database {
           created_at: string;
         }[];
       };
+      update_event: {
+        Args: {
+          p_event_id: string;
+          p_user_id: string;
+          p_title?: string;
+          p_ingress?: string | null;
+          p_body?: string | null;
+          p_from_date?: string;
+          p_to_date?: string;
+          p_has_time_slot?: boolean;
+          p_time_slot_start?: string | null;
+          p_time_slot_end?: string | null;
+          p_location?: string | null;
+          p_cover_image_url?: string | null;
+          p_images?: string[];
+          p_ticket_types?: any[];
+          p_entrance?: string[];
+          p_parking?: string[];
+          p_camping?: string[];
+          p_template_id?: string;
+        };
+        Returns: Database['public']['Tables']['events']['Row'];
+      };
     };
     Enums: {
       [_ in never]: never;

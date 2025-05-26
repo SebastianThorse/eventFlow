@@ -123,7 +123,7 @@ const pricingPlans = [
     id: 'starter',
     name: 'Starter',
     description: 'Perfect for a single event',
-    price: 5,
+    price: 9,
     credits: 1,
     featured: false,
     features: [
@@ -139,10 +139,10 @@ const pricingPlans = [
     name: 'Pro',
     description: 'Best value for multiple events',
     price: 20,
-    credits: 5,
+    credits: 3,
     featured: true,
     features: [
-      'Five event pages',
+      'Three event pages',
       'All templates, including premium',
       'QR code generation',
       'PDF download',
@@ -151,21 +151,20 @@ const pricingPlans = [
     ],
   },
   {
-    id: 'custom',
-    name: 'Enterprise',
-    description: 'For organizations with unique needs',
-    price: 0,
-    credits: 0,
+    id: 'business',
+    name: 'Business',
+    description: 'Ideal for businesses and organizations',
+    price: 29,
+    credits: 5,
     featured: false,
     features: [
-      'Custom number of event pages',
-      'All templates',
+      'Five event pages',
+      'All templates, including premium',
       'QR code generation',
       'PDF download',
       'Mobile optimized',
-      'Dedicated support',
-      'Custom branding options',
-      'Analytics dashboard',
+      'Priority support',
+      'Advanced analytics',
     ],
   },
 ];
@@ -174,6 +173,10 @@ const faqs = [
   {
     question: 'What is an event credit?',
     answer: 'An event credit allows you to create one event page. Once published, you can edit the page as much as you like without using additional credits.',
+  },
+  {
+    question: 'Do I get any free credits?',
+    answer: 'Yes! You get 1 free credit when you sign up, allowing you to create your first event page at no cost.',
   },
   {
     question: 'Do credits expire?',

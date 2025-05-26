@@ -45,15 +45,6 @@ export function MainNav() {
         >
           Templates
         </Link>
-        <Link
-          href="/about"
-          className={cn(
-            "transition-colors hover:text-foreground/80",
-            pathname?.startsWith("/about") ? "text-foreground" : "text-foreground/60"
-          )}
-        >
-          About
-        </Link>
       </nav>
     </div>
   );
